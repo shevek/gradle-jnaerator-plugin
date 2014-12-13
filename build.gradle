@@ -1,0 +1,31 @@
+buildscript {
+    apply from: file('gradle/buildscript.gradle'), to: buildscript 
+}
+
+plugins {
+	id 'nu.studer.plugindev' version '1.0.3'
+}
+
+ext.githubProjectName = rootProject.name
+group = "org.anarres.gradle"
+
+apply from: file('gradle/convention.gradle')
+apply from: file('gradle/github.gradle')
+apply from: file('gradle/plugin.gradle')
+apply from: file('gradle/check.gradle')
+apply from: file('gradle/license.gradle')
+
+dependencies {
+	// compile 'com.google.code.findbugs:jsr305:2.0.2'
+	compile gradleApi()
+	compile "com.nativelibs4java:jnaerator:0.11"
+
+	testCompile 'junit:junit:4.11'
+}
+
+javadoc {
+	options.links "http://docs.oracle.com/javase/7/docs/api/",
+			"http://www.gradle.org/docs/current/javadoc/",
+			"http://groovy.codehaus.org/api/"
+	options.splitIndex true
+}
