@@ -1,8 +1,8 @@
 plugindev {
-	pluginImplementationClass 'org.anarres.gradle.plugin.velocity.VelocityPlugin'
-	pluginDescription "A gradle plugin for the Velocity pre-processor."
+	pluginImplementationClass 'org.anarres.gradle.plugin.jnaerator.JNAeratorPlugin'
+	pluginDescription "A gradle plugin for the JNAerator binding generator."
 	pluginLicenses 'Apache-2.0'
-	pluginTags 'gradle', 'plugin', 'velocity', 'preprocessor', 'filter'
+	pluginTags 'gradle', 'plugin', 'jnaerator', 'jna', 'bridj'
 	authorId 'shevek'
 	authorName 'Shevek'
 	authorEmail 'github@anarres.org'

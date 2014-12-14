@@ -14,9 +14,9 @@ public class JNAeratorPluginExtension {
 
     public static final String NAME = "jnaerator";
     private File outputDir;
-    private String outputPackage;
     private String libraryName;
-    private FileCollection headerFiles = new SimpleFileCollection();
+    private String packageName;
+    private Object[] headerFiles;
 
     public File getOutputDir() {
         return outputDir;
@@ -26,15 +26,6 @@ public class JNAeratorPluginExtension {
         this.outputDir = outputDir;
     }
 
-    public String getOutputPackage() {
-        return outputPackage;
-    }
-
-    public void setOutputPackage(String outputPackage) {
-        this.outputPackage = outputPackage;
-    }
-
-    @Nonnull
     public String getLibraryName() {
         return libraryName;
     }
@@ -43,17 +34,19 @@ public class JNAeratorPluginExtension {
         this.libraryName = libraryName;
     }
 
-    public void setHeaderFiles(@Nonnull FileCollection headerFiles) {
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public void setHeaderFiles(@Nonnull Object[] headerFiles) {
         this.headerFiles = headerFiles;
     }
 
-    @Nonnull
-    public FileCollection getHeaderFiles() {
+    public Object[] getHeaderFiles() {
         return headerFiles;
     }
-
-    public void headerFiles(@Nonnull FileCollection headerFiles) {
-        this.headerFiles = new UnionFileCollection(this.headerFiles, headerFiles);
-    }
-
 }
