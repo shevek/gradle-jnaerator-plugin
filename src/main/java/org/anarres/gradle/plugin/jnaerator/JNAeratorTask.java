@@ -23,11 +23,11 @@ import org.slf4j.LoggerFactory;
 public class JNAeratorTask extends DefaultTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(JNAeratorTask.class);
-
     private File outputDir;
     private String libraryName;
     private String packageName;
     private FileCollection headerFiles;
+    private JNAeratorConfig.Runtime runtimeMode = JNAeratorConfig.Runtime.JNA;
 
     @OutputDirectory
     public File getOutputDir() {
@@ -84,6 +84,21 @@ public class JNAeratorTask extends DefaultTask {
         setHeaderFiles(headerFiles);
     }
 
+    public JNAeratorConfig.Runtime getRuntimeMode() {
+        return runtimeMode;
+    }
+
+    public void setRuntimeMode(JNAeratorConfig.Runtime runtimeMode) {
+        this.runtimeMode = runtimeMode;
+    }
+
+    public void runtimeMode(Object runtimeMode) {
+        if (runtimeMode instanceof JNAeratorConfig.Runtime)
+            this.runtimeMode = (JNAeratorConfig.Runtime) runtimeMode;
+        else
+            this.runtimeMode = JNAeratorConfig.Runtime.valueOf(String.valueOf(runtimeMode));
+    }
+
     @TaskAction
     public void run() {
         List<String> args = new ArrayList<String>();
@@ -98,13 +113,16 @@ public class JNAeratorTask extends DefaultTask {
 
         args.add(JNAeratorCommandLineArgs.OptionDef.OutputMode.clSwitch);
         args.add(JNAeratorConfig.OutputMode.Directory.name());
+
         args.add(JNAeratorCommandLineArgs.OptionDef.Runtime.clSwitch);
-        args.add(JNAeratorConfig.Runtime.JNA.name());
+        args.add(getRuntimeMode().name());
 
-        String outputPath = getPackageName().replace('.', File.separatorChar);
-        File outputDir = new File(getOutputDir(), outputPath);
-        args.add(outputDir.getAbsolutePath());
+        args.add(JNAeratorCommandLineArgs.OptionDef.OutputDir.clSwitch);
+        // String outputPath = getPackageName().replace('.', File.separatorChar);
+        // File outputDir = new File(getOutputDir(), outputPath);
+        args.add(getOutputDir().getAbsolutePath());
 
+        args.add(JNAeratorCommandLineArgs.OptionDef.ForceOverwrite.clSwitch);
         args.add(JNAeratorCommandLineArgs.OptionDef.Verbose.clSwitch);
 
         DefaultGroovyMethods.deleteDir(outputDir);
