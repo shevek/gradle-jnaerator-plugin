@@ -14,7 +14,7 @@ plugindev {
 }
 
 bintray {
-	user = bintrayUsername
-	key = bintrayApiKey
+	user = rootProject.hasProperty('bintrayUsername')?rootProject.bintrayUsername:''
+	key = rootProject.hasProperty('bintrayApiKey')?rootProject.bintrayApiKey:''
 	pkg.repo = 'gradle-plugins'
 }
