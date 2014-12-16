@@ -25,7 +25,8 @@ public class JNAeratorPluginApplyTest {
     @Test
     public void testApply() {
         project.apply(Collections.singletonMap("plugin", "java"));
-        project.apply(Collections.singletonMap("plugin", "org.anarres.jnaerator"));
+        // project.apply(Collections.singletonMap("plugin", "org.anarres.jnaerator"));
+        project.getPlugins().apply(JNAeratorPlugin.class);
         assertTrue("Project is missing plugin", project.getPlugins().hasPlugin(JNAeratorPlugin.class));
         Task task = project.getTasks().findByName("jnaeratorGenerate");
         assertNotNull("Project is missing jnaerator task", task);
