@@ -39,6 +39,9 @@
 		}
 	}
 
+apply plugin: 'build-announcements'
+apply plugin: 'build-dashboard'
+
 // Generate wrapper, which is distributed as part of source to alleviate the need of installing gradle
 wrapper {
 	gradleVersion = '2.2.1'
