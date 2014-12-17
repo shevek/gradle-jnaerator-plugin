@@ -13,8 +13,6 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFiles;
 import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -22,7 +20,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JNAeratorTask extends DefaultTask {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JNAeratorTask.class);
+    // private static final Logger LOG = LoggerFactory.getLogger(JNAeratorTask.class);
     private File outputDir;
     private String libraryName;
     private String packageName;
@@ -31,6 +29,7 @@ public class JNAeratorTask extends DefaultTask {
 
     @OutputDirectory
     public File getOutputDir() {
+        getLogger();
         return outputDir;
     }
 
@@ -48,7 +47,7 @@ public class JNAeratorTask extends DefaultTask {
     }
 
     public void setLibraryName(String libraryName) {
-        LOG.info("setLibraryName: " + libraryName);
+        // LOG.info("setLibraryName: " + libraryName);
         this.libraryName = libraryName;
     }
 
@@ -71,12 +70,12 @@ public class JNAeratorTask extends DefaultTask {
 
     @InputFiles
     public FileCollection getHeaderFiles() {
-        LOG.info("getHeaderFiles = " + headerFiles);
+        // LOG.info("getHeaderFiles = " + headerFiles);
         return headerFiles;
     }
 
     public void setHeaderFiles(Object... headerFiles) {
-        LOG.info("setHeaderFiles = " + headerFiles);
+        // LOG.info("setHeaderFiles = " + headerFiles);
         this.headerFiles = getProject().files(headerFiles);
     }
 
