@@ -5,7 +5,9 @@ import com.ochafik.lang.jnaerator.JNAeratorCommandLineArgs;
 import com.ochafik.lang.jnaerator.JNAeratorConfig;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.FileCollection;
@@ -21,11 +23,22 @@ import org.gradle.api.tasks.TaskAction;
 public class JNAeratorTask extends DefaultTask {
 
     // private static final Logger LOG = LoggerFactory.getLogger(JNAeratorTask.class);
+    @OutputDirectory
     private File outputDir;
+    @Input
     private String libraryName;
+    @Input
     private String packageName;
+    @InputFiles
     private FileCollection headerFiles;
+    @Input
     private JNAeratorConfig.Runtime runtimeMode = JNAeratorConfig.Runtime.JNA;
+    @Input
+    private List<String> args = new ArrayList<String>();
+    @Input
+    private final Set<String> define = new HashSet<String>();
+    @Input
+    private final Set<String> undefine = new HashSet<String>();
 
     @OutputDirectory
     public File getOutputDir() {
@@ -98,6 +111,31 @@ public class JNAeratorTask extends DefaultTask {
             this.runtimeMode = JNAeratorConfig.Runtime.valueOf(String.valueOf(runtimeMode));
     }
 
+    public void define(Object... args) {
+        for (Object arg : args)
+            define.add(String.valueOf(arg));
+    }
+
+    public void undefine(Object... args) {
+        for (Object arg : args)
+            undefine.add(String.valueOf(arg));
+    }
+
+    public List<String> getArgs() {
+        return args;
+    }
+
+    public void setArgs(List<String> args) {
+        this.args = args;
+    }
+
+    public void args(Object... args) {
+        List<String> tmp = new ArrayList<String>();
+        for (Object arg : args)
+            tmp.add(String.valueOf(arg));
+        setArgs(tmp);
+    }
+
     @TaskAction
     public void run() {
         List<String> args = new ArrayList<String>();
@@ -122,10 +160,20 @@ public class JNAeratorTask extends DefaultTask {
         args.add(getOutputDir().getAbsolutePath());
 
         args.add(JNAeratorCommandLineArgs.OptionDef.ForceOverwrite.clSwitch);
-        args.add(JNAeratorCommandLineArgs.OptionDef.Verbose.clSwitch);
+        // args.add(JNAeratorCommandLineArgs.OptionDef.Verbose.clSwitch);
+        args.add("-v");
+
+        for (String d : define)
+            args.add("-D" + d);
+        for (String u : undefine)
+            args.add("-U" + u);
+
+        args.addAll(getArgs());
 
         DefaultGroovyMethods.deleteDir(outputDir);
         outputDir.mkdirs();
+        getLogger().info("Invoking jnaerator " + args);
+
         JNAerator.main(args.toArray(new String[args.size()]));
     }
 }
