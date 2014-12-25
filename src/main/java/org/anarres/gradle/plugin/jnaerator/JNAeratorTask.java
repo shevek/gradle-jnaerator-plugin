@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.FileCollection;
@@ -34,11 +35,11 @@ public class JNAeratorTask extends DefaultTask {
     @Input
     private JNAeratorConfig.Runtime runtimeMode = JNAeratorConfig.Runtime.JNA;
     @Input
-    private List<String> args = new ArrayList<String>();
-    @Input
     private final Set<String> define = new HashSet<String>();
     @Input
     private final Set<String> undefine = new HashSet<String>();
+    @Input
+    private List<String> extraArgs = new ArrayList<String>();
 
     @OutputDirectory
     public File getOutputDir() {
@@ -46,11 +47,11 @@ public class JNAeratorTask extends DefaultTask {
         return outputDir;
     }
 
-    public void setOutputDir(Object outputDir) {
+    public void setOutputDir(@Nonnull Object outputDir) {
         this.outputDir = getProject().file(outputDir);
     }
 
-    public void outputDir(Object outputDir) {
+    public void outputDir(@Nonnull Object outputDir) {
         setOutputDir(outputDir);
     }
 
@@ -59,12 +60,12 @@ public class JNAeratorTask extends DefaultTask {
         return libraryName;
     }
 
-    public void setLibraryName(String libraryName) {
+    public void setLibraryName(@Nonnull String libraryName) {
         // LOG.info("setLibraryName: " + libraryName);
         this.libraryName = libraryName;
     }
 
-    public void libraryName(String libraryName) {
+    public void libraryName(@Nonnull String libraryName) {
         setLibraryName(libraryName);
     }
 
@@ -73,11 +74,11 @@ public class JNAeratorTask extends DefaultTask {
         return packageName;
     }
 
-    public void setPackageName(String packageName) {
+    public void setPackageName(@Nonnull String packageName) {
         this.packageName = packageName;
     }
 
-    public void packageName(String packageName) {
+    public void packageName(@Nonnull String packageName) {
         setPackageName(packageName);
     }
 
@@ -87,53 +88,53 @@ public class JNAeratorTask extends DefaultTask {
         return headerFiles;
     }
 
-    public void setHeaderFiles(Object... headerFiles) {
+    public void setHeaderFiles(@Nonnull Object... headerFiles) {
         // LOG.info("setHeaderFiles = " + headerFiles);
         this.headerFiles = getProject().files(headerFiles);
     }
 
-    public void headerFiles(Object... headerFiles) {
+    public void headerFiles(@Nonnull Object... headerFiles) {
         setHeaderFiles(headerFiles);
     }
 
+    @Nonnull
     public JNAeratorConfig.Runtime getRuntimeMode() {
         return runtimeMode;
     }
 
-    public void setRuntimeMode(JNAeratorConfig.Runtime runtimeMode) {
+    public void setRuntimeMode(@Nonnull JNAeratorConfig.Runtime runtimeMode) {
         this.runtimeMode = runtimeMode;
     }
 
-    public void runtimeMode(Object runtimeMode) {
+    public void runtimeMode(@Nonnull Object runtimeMode) {
         if (runtimeMode instanceof JNAeratorConfig.Runtime)
             this.runtimeMode = (JNAeratorConfig.Runtime) runtimeMode;
         else
             this.runtimeMode = JNAeratorConfig.Runtime.valueOf(String.valueOf(runtimeMode));
     }
 
-    public void define(Object... args) {
+    public void define(@Nonnull Object... args) {
         for (Object arg : args)
             define.add(String.valueOf(arg));
     }
 
-    public void undefine(Object... args) {
+    public void undefine(@Nonnull Object... args) {
         for (Object arg : args)
             undefine.add(String.valueOf(arg));
     }
 
-    public List<String> getArgs() {
-        return args;
+    @Nonnull
+    public List<String> getExtraArgs() {
+        return extraArgs;
     }
 
-    public void setArgs(List<String> args) {
-        this.args = args;
+    public void setExtraArgs(@Nonnull List<String> extraArgs) {
+        this.extraArgs = extraArgs;
     }
 
-    public void args(Object... args) {
-        List<String> tmp = new ArrayList<String>();
-        for (Object arg : args)
-            tmp.add(String.valueOf(arg));
-        setArgs(tmp);
+    public void extraArgs(@Nonnull Object... extraArgs) {
+        for (Object arg : extraArgs)
+            this.extraArgs.add(String.valueOf(arg));
     }
 
     @TaskAction
@@ -168,7 +169,7 @@ public class JNAeratorTask extends DefaultTask {
         for (String u : undefine)
             args.add("-U" + u);
 
-        args.addAll(getArgs());
+        args.addAll(getExtraArgs());
 
         DefaultGroovyMethods.deleteDir(outputDir);
         outputDir.mkdirs();
