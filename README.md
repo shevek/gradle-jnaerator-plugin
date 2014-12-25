@@ -35,6 +35,8 @@ jnaerator {
 	packageName 'org.anarres.jna.udev'
 	headerFiles "/usr/include/libudev.h"
 	// runtimeMode "JNAerator"
+	// define "FOO=bar", "ANSWER=42"
+	// args "-v", "-foo", "-bar"
 }
 ```
 
