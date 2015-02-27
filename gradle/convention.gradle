@@ -1,5 +1,5 @@
 	apply plugin: 'java' // Plugin as major conventions
-	apply plugin: 'errorprone'
+	// apply plugin: 'errorprone'
 	apply plugin: 'info'
 
 	sourceCompatibility = 1.6
@@ -11,6 +11,14 @@
 		// mavenLocal()
 		mavenCentral()
 		// jcenter()
+	}
+
+	dependencies {
+		compile 'com.google.code.findbugs:jsr305:2.0.2'
+
+		testCompile 'junit:junit:4.11'
+
+		testRuntime 'org.slf4j:slf4j-simple:1.7.7'
 	}
 
 	javadoc {
