@@ -1,23 +1,42 @@
 buildscript {
-    apply from: file('gradle/buildscript.gradle'), to: buildscript 
+	repositories {
+		// mavenLocal()
+		mavenCentral()
+		jcenter()
+		// maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+	}
+
+	dependencies {
+		classpath 'org.anarres.gradle:gradle-stdproject-plugin:1.0.8'
+	}
 }
 
-plugins {
-	id 'nu.studer.plugindev' version '1.0.3'
+apply plugin: 'org.anarres.stdproject'
+stdproject {
+	javadocLinkSource = true;
 }
 
-ext.githubProjectName = rootProject.name
+apply plugin: 'org.anarres.stdmodule'
+stdmodule {
+	description "A Gradle plugin for the JNAerator binding generator."
+	author id: 'shevek', name: 'Shevek', email: 'github@anarres.org'
+	license 'Apache-2.0'
+}
+
+apply plugin: 'org.anarres.stdplugin'
+stdplugin {
+	implementation "org.anarres.jnaerator", "org.anarres.gradle.plugin.jnaerator.JNAeratorPlugin"
+}
+
 group = "org.anarres.gradle"
-
-apply from: file('gradle/convention.gradle')
-apply from: file('gradle/github.gradle')
-apply from: file('gradle/check.gradle')
-apply from: file('gradle/license.gradle')
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 
 dependencies {
-	compile gradleApi()
+	compile 'com.google.code.findbugs:annotations:3.0.1'
 	compile "com.nativelibs4java:jnaerator:0.12"
 }
 
-// https://github.com/etiennestuder/gradle-plugindev-plugin/issues/11
-apply from: file('gradle/plugin.gradle')
+animalsniffer {
+	skip = true
+}
