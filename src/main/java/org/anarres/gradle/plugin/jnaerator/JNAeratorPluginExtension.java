@@ -3,8 +3,6 @@ package org.anarres.gradle.plugin.jnaerator;
 import java.io.File;
 import javax.annotation.Nonnull;
 import org.gradle.api.file.FileCollection;
-import org.gradle.api.internal.file.UnionFileCollection;
-import org.gradle.api.internal.file.collections.SimpleFileCollection;
 
 /**
  *
